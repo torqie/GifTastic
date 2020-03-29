@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Word Guess Game</title>
+  <title>GifTastic!</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Oswald:200,300,400,500,600,700|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
@@ -17,20 +17,22 @@
 
 <header>
   <div class="container text-center mt-5">
-    <img src="assets/images/GifTastic.png" alt="GifTastic Logo" class="logo">
+    <img src="assets/images/logo.png" alt="GifTastic Logo" class="logo">
   </div>
 </header>
 
   <div class="container">
     <div class="row mt-4">
       <div class="col-12">
+        <form action="#">
           <div class="input-group">
             <input type="text" id="newTopic" name="newTopic" class="form-control" placeholder="Add a new topic...">
 
             <div class="input-group-append">
-              <button type="button" class="btn btn-dark" id="newTopicSubmit">Add New Topic</button>
+              <button type="submit" class="btn btn-dark" id="newTopicSubmit">Add New Topic</button>
             </div>
           </div>
+        </form>
       </div>
     </div>
 
@@ -41,7 +43,7 @@
       </div>
     </div>
     <hr />
-    <div class="row">
+    <div class="row text-center">
       <!-- Place to display the images -->
       <div id="images" class="col-12">
         <div class="row text-center"></div>
@@ -55,6 +57,7 @@
   <!-- Bootstrap JS -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <!-- Main App JS -->
+  <script type="text/javascript" src="assets/js/giftastic.js"></script>
   <script type="text/javascript" src="assets/js/app.js"></script>
 </body>
 </html>

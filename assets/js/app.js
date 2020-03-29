@@ -1,8 +1,11 @@
 $(document).ready(function () {
 
-  $("#newTopicSubmit").on("click", function() {
+  $("#newTopicSubmit").on("click", function(event) {
+    event.preventDefault();
     if($("#newTopic").val()) {
-      gifTastic.addNewButton($("#newTopic").val());
+      gifTastic.topics.push($("#newTopic").val());
+      gifTastic.addButtons();
+      $("#newTopic").val("");
     }
   });
 

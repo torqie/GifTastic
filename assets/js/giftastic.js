@@ -3,13 +3,20 @@
 var gifTastic = {
 
   // Variables for the object.
-  topics: ["boating", "Coding", "Gaming", "Audi", "Toyota Tundra"], // Topics to be used at the start of the application.
+  topics: ["boating", "Coding", "Gaming", "Audi", "Toyota", "Dog", "skydiving", "utah jazz", "gronk"], // Topics to be used at the start of the application.
 
-  addNewButton(name) {
+  createButton(name) {
     var button = $("<button>");
     $(button).text(this.capitalizeFirstLetter(name));
     $(button).addClass("btn btn-secondary gif-button mr-2 mb-2");
     $(button).appendTo("#button-list");
+  },
+
+  addButtons() {
+    $("#button-list").empty();
+    for(let i = 0; i < this.topics.length; i++) {
+      this.createButton(gifTastic.topics[i]);
+    }
   },
 
   getGifs(query, limit) {
@@ -20,28 +27,38 @@ var gifTastic = {
       method: "GET"
     }).then(function(response) {
       var results = response.data;
+      console.log(results.length);
 
-      for(var i = 0; i < results.length; i++) {
-
-        var imageDiv = $("<div>");
-        $(imageDiv).addClass("col-12 col-sm-6 col-md-4 col-lg-3 mb-4");
-
-        var rating = $("<div>");
-        $(rating).addClass("rating");
-        $(rating).html("Rating: " + results[i].rating);
-
-        // Create new image
-        var newImage = $("<img>");
-        $(newImage).attr("data-animate", results[i].images.fixed_width.url);
-        $(newImage).attr("data-still", results[i].images.fixed_width_still.url);
-        $(newImage).attr("data-state", "still");
-        $(newImage).attr("src", results[i].images.fixed_width_still.url);
-        $(newImage).addClass("gif img img-thumbnail");
-
-        $(imageDiv).append(newImage, rating);
-        $("#images>.row").prepend(imageDiv);
+      if(results.length > 0) {
+        $("#images>.row").empty();
+        for(var i = 0; i < results.length; i++) {
+          gifTastic.addGif(results[i]);
+        }
+      } else {
+        $("#images>.row").html("<h3>No Gifs available for that topic.</h3>");
       }
+
     });
+  },
+
+  addGif(gif){
+    var imageDiv = $("<div>");
+    $(imageDiv).addClass("col-12 col-sm-6 col-md-4 col-lg-3 mb-4");
+
+    var rating = $("<div>");
+    $(rating).addClass("rating");
+    $(rating).html("Rating: " + gif.rating);
+
+    // Create new image
+    var newImage = $("<img>");
+    $(newImage).attr("data-animate", gif.images.fixed_width.url);
+    $(newImage).attr("data-still", gif.images.fixed_width_still.url);
+    $(newImage).attr("data-state", "still");
+    $(newImage).attr("src", gif.images.fixed_width_still.url);
+    $(newImage).addClass("gif img img-thumbnail");
+
+    $(imageDiv).append(newImage, rating);
+    $("#images>.row").prepend(imageDiv);
   },
 
   toggleGif(gif) {
@@ -60,7 +77,5 @@ var gifTastic = {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 };
-//Add the starting buttons
-for(let i = 0; i < gifTastic.topics.length; i++) {
-  gifTastic.addNewButton(gifTastic.topics[i]);
-}
+
+gifTastic.addButtons();
