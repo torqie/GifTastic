@@ -14,16 +14,39 @@ var gifTastic = {
   },
 
   getGifs(query, limit) {
-    console.log("You clicked on the " + query + " button");
-  },
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + query + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=" + limit;
 
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+      var results = response.data;
+
+      for(var i = 0; i < results.length; i++) {
+        console.log(results[i].images.fixed_height.url);
+        // Create new image
+        var newImage = $("<img>");
+        $(newImage).attr("data-animate", results[i].images.fixed_height.url);
+        $(newImage).attr("data-still", results[i].images.fixed_height_still.url);
+        $(newImage).attr("data-state", "still");
+
+        $(newImage).attr("src", results[i].images.fixed_height_still.url);
+        $(newImage).addClass("gif");
+
+        $("#images").prepend(newImage);
+        console.log(response);
+      }
+
+
+    });
+  },
 
 
 
   /** -- HELPER METHODS -- **/
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  },
+  }
 };
 
 
