@@ -23,7 +23,7 @@ var gifTastic = {
       var results = response.data;
 
       for(var i = 0; i < results.length; i++) {
-        console.log(results[i].images.fixed_height.url);
+
         // Create new image
         var newImage = $("<img>");
         $(newImage).attr("data-animate", results[i].images.fixed_height.url);
@@ -34,14 +34,20 @@ var gifTastic = {
         $(newImage).addClass("gif");
 
         $("#images").prepend(newImage);
-        console.log(response);
       }
-
-
     });
   },
 
-
+  toggleGif(gif) {
+    var state = $(gif).attr("data-state");
+    if(state === "still") {
+      $(gif).attr("src", $(gif).attr("data-animate"));
+      $(gif).attr("data-state", "animate");
+    } else {
+      $(gif).attr("src", $(gif).attr("data-still"));
+      $(gif).attr("data-state", "still");
+    }
+  },
 
   /** -- HELPER METHODS -- **/
   capitalizeFirstLetter(string) {
@@ -67,6 +73,11 @@ $(document).ready(function () {
 
   $("#button-list").on("click", ".gif-button", function () {
     gifTastic.getGifs($(this).text(), 10);
+  });
+
+  $("#images").on("click", ".gif", function() {
+    gifTastic.toggleGif($(this));
+
   });
 });
 
