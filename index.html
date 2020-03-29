@@ -15,30 +15,36 @@
 </head>
 <body>
 
+<header>
+  <div class="container text-center mt-5">
+    <img src="assets/images/GifTastic.png" alt="GifTastic Logo" class="logo">
+  </div>
+</header>
+
   <div class="container">
-    <div class="row">
+    <div class="row mt-4">
+      <div class="col-12">
+          <div class="input-group">
+            <input type="text" id="newTopic" name="newTopic" class="form-control" placeholder="Add a new topic...">
+
+            <div class="input-group-append">
+              <button type="button" class="btn btn-dark" id="newTopicSubmit">Add New Topic</button>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
       <div class="col-12">
         <!-- List of Buttons -->
         <div id="button-list"></div>
       </div>
     </div>
-
+    <hr />
     <div class="row">
       <!-- Place to display the images -->
-      <div id="images" class="col-9">
-
-      </div>
-
-      <!-- Form to submit a new button -->
-      <div class="col-3">
-        <form action="#">
-          <div class="form-group">
-            <input type="text" id="newTopic" name="newTopic" class="form-control">
-          </div>
-          <div class="form-group">
-            <button type="submit" id="newTopicSubmit">Add New Topic</button>
-          </div>
-        </form>
+      <div id="images" class="col-12">
+        <div class="row text-center"></div>
       </div>
     </div>
   </div>
