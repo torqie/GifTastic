@@ -12,22 +12,37 @@
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="assets/css/style.css">
 
+  <!-- Plugin Stylesheets -->
+  <link rel="stylesheet" href="assets/css/bootstrap-drawer.min.css">
+
 </head>
 <body>
 
-<header>
-  <div class="container text-center mt-5">
-    <img src="assets/images/logo.png" alt="GifTastic Logo" class="logo">
+  <div id="favorites" class="drawer dw-xs-10 dw-sm-6 dw-md-3 fold" aria-labelledby="favorites">
+    <div class="drawer-controls">
+      <a href="#favorites" data-toggle="drawer" aria-foldedopen="false" aria-controls="favorites" class="btn btn-secondary btn-sm">Favorites</a>
+    </div>
+    <div class="drawer-contents">
+      <div class="drawer-heading">
+        <h5 class="drawer-title">Your Favorites</h5>
+      </div>
+      <div id="favorites-body" class="drawer-body"></div>
+    </div>
   </div>
-</header>
+
+  <header>
+    <div class="container text-center mt-5">
+      <img src="assets/images/logo.png" alt="GifTastic Logo" class="logo">
+    </div>
+  </header>
 
   <div class="container">
+
     <div class="row mt-4">
       <div class="col-12">
         <form action="#">
           <div class="input-group">
-            <input type="text" id="newTopic" name="newTopic" class="form-control" placeholder="Add a new topic...">
-
+            <input type="text" id="new-topic" class="form-control" placeholder="Add a new topic...">
             <div class="input-group-append">
               <button type="submit" class="btn btn-dark" id="newTopicSubmit">Add New Topic</button>
             </div>
@@ -42,22 +57,30 @@
         <div id="button-list"></div>
       </div>
     </div>
+
     <hr />
-    <div class="row text-center">
+
+    <div class="row">
       <!-- Place to display the images -->
-      <div id="images" class="col-12">
-        <div class="row text-center"></div>
+      <div class="col-12">
+        <h1>Images</h1>
+        <div id="images" class="row text-center"></div>
       </div>
     </div>
   </div>
+
+  <div id="snackbar"></div>
 
   <!-- Jquery -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <!-- Bootstrap JS -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="assets/js/drawer.min.js"></script>
+
   <!-- Main App JS -->
   <script type="text/javascript" src="assets/js/giftastic.js"></script>
   <script type="text/javascript" src="assets/js/app.js"></script>
+
 </body>
 </html>

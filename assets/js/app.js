@@ -2,10 +2,10 @@ $(document).ready(function () {
 
   $("#newTopicSubmit").on("click", function(event) {
     event.preventDefault();
-    if($("#newTopic").val()) {
-      gifTastic.topics.push($("#newTopic").val());
+    if($("#new-topic").val()) {
+      gifTastic.topics.push($("#new-topic").val());
       gifTastic.addButtons();
-      $("#newTopic").val("");
+      $("#new-topic").val("");
     }
   });
 
@@ -13,8 +13,13 @@ $(document).ready(function () {
     gifTastic.getGifs($(this).text(), 10);
   });
 
-  $("#images").on("click", ".gif", function() {
+  $("#images, #favorites").on("click", ".gif", function() {
     gifTastic.toggleGif($(this));
   });
+
+  $("#images").on("click", ".fav", function() {
+    gifTastic.addToFavorites($(this).attr("data-id"));
+  });
+
 
 });

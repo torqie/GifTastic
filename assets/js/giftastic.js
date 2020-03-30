@@ -3,7 +3,7 @@
 var gifTastic = {
 
   // Variables for the object.
-  topics: ["boating", "Coding", "Gaming", "Audi", "Toyota", "Dog", "skydiving", "utah jazz", "gronk"], // Topics to be used at the start of the application.
+  topics: ["boating", "golfing", "coding", "gaming", "audi", "toyota", "dog", "skydiving", "utah jazz", "gronk"], // Topics to be used at the start of the application.
 
   createButton(name) {
     var button = $("<button>");
@@ -19,46 +19,64 @@ var gifTastic = {
     }
   },
 
-  getGifs(query, limit) {
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + query + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=" + limit;
-
+  getData(queryUrl, callback) {
     $.ajax({
-      url: queryURL,
-      method: "GET"
-    }).then(function(response) {
-      var results = response.data;
-      console.log(results.length);
-
-      if(results.length > 0) {
-        $("#images>.row").empty();
-        for(var i = 0; i < results.length; i++) {
-          gifTastic.addGif(results[i]);
-        }
-      } else {
-        $("#images>.row").html("<h3>No Gifs available for that topic.</h3>");
-      }
-
+      url: queryUrl,
+      method: "GET",
+    }).done(function (response) {
+      callback(response.data);
     });
   },
 
-  addGif(gif){
-    var imageDiv = $("<div>");
-    $(imageDiv).addClass("col-12 col-sm-6 col-md-4 col-lg-3 mb-4");
+  getGifs(query, limit) {
+    var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + query + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=" + limit;
+    this.getData(queryUrl, function(results) {
+        if(results.length > 0) {
+          for(var i = 0; i < results.length; i++) {
+            gifTastic.addGif(results[i]);
+          }
+        } else {
+          $("#images").html("<h3>No Gifs available for that topic.</h3>");
+        }
+    });
+  },
 
-    var rating = $("<div>");
-    $(rating).addClass("rating");
-    $(rating).html("Rating: " + gif.rating);
+  getGifById(gifId, callback) {
+    var queryUrl = "https://api.giphy.com/v1/gifs/" + gifId + "?api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9";
+    this.getData(queryUrl, function(results) {
+      callback(results);
+    });
+  },
+
+  addGif(gif, favorite = false){
+    var imageDiv = $("<div class='col-12 col-sm-6 col-md-4 col-lg-3 mb-4'>");
+
+    var card = $("<div class='card'>");
 
     // Create new image
-    var newImage = $("<img>");
+    var newImage = $("<img class='gif card-img-top'>");
     $(newImage).attr("data-animate", gif.images.fixed_width.url);
     $(newImage).attr("data-still", gif.images.fixed_width_still.url);
     $(newImage).attr("data-state", "still");
     $(newImage).attr("src", gif.images.fixed_width_still.url);
-    $(newImage).addClass("gif img img-thumbnail");
 
-    $(imageDiv).append(newImage, rating);
-    $("#images>.row").prepend(imageDiv);
+    var cardBody = $("<div class='card-body'>");
+    var title =  $("<h6 class='card-title'>").text(gif.title);
+    var cardText = $("<div class='card-text'>").text("Rating: " + gif.rating);
+    var favBtn = $("<button class='fav btn btn-success'>").text("Add To Favorites")
+    $(favBtn).attr("data-id", gif.id)
+    $(cardBody).append(title, cardText, favBtn);
+    $(card).append(newImage, cardBody);
+    $(imageDiv).append(card);
+
+    if(favorite) {
+      $(imageDiv).attr("class", "col-12");
+      $("#favorites-body").append(imageDiv);
+    } else {
+      $("#images").append(imageDiv);
+    }
+
+
   },
 
   toggleGif(gif) {
@@ -72,9 +90,24 @@ var gifTastic = {
     }
   },
 
+  addToFavorites(gifId) {
+    this.getGifById(gifId, function (results) {
+      console.log("fav", results);
+      gifTastic.addGif(results, true);
+      gifTastic.snackbar("Gif has been added to your favorites.")
+    });
+  },
+
   /** -- HELPER METHODS -- **/
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  },
+
+  snackbar(message) {
+    sb = $("#snackbar");
+    $(sb).text(message);
+    $(sb).addClass("show");
+    setTimeout(function(){ $(sb).removeClass("show") }, 3000);
   }
 };
 
