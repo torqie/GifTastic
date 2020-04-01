@@ -4,6 +4,10 @@ var gifTastic = {
 
   // Variables for the object.
   topics: ["boating", "golfing", "coding", "gaming", "audi", "toyota", "dog", "skydiving", "utah jazz", "gronk"], // Topics to be used at the start of the application.
+  offset: 0,
+  loadMore: false,
+  currentTopic: "",
+  favorites: JSON.parse(localStorage.getItem("favorites")),
 
   createButton(name) {
     var button = $("<button>");
@@ -28,10 +32,14 @@ var gifTastic = {
     });
   },
 
-  getGifs(query, limit) {
-    var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + query + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=" + limit;
+  getGifs() {
+    var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + this.currentTopic + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10&offset=" + this.offset;
     this.getData(queryUrl, function(results) {
         if(results.length > 0) {
+          console.log("loadMore: " + gifTastic.loadMore);
+          if(!gifTastic.loadMore) {
+            $("#images").empty();
+          }
           for(var i = 0; i < results.length; i++) {
             gifTastic.addGif(results[i]);
           }
@@ -75,8 +83,6 @@ var gifTastic = {
     } else {
       $("#images").append(imageDiv);
     }
-
-
   },
 
   toggleGif(gif) {
@@ -91,11 +97,24 @@ var gifTastic = {
   },
 
   addToFavorites(gifId) {
-    this.getGifById(gifId, function (results) {
-      console.log("fav", results);
-      gifTastic.addGif(results, true);
-      gifTastic.snackbar("Gif has been added to your favorites.")
-    });
+    this.favorites.push(gifId);
+    localStorage.setItem("favorites", JSON.stringify(this.favorites));
+    this.addToFavoritesFromLocalStorage();
+  },
+
+  addToFavoritesFromLocalStorage() {
+    $("#favorites-body").empty();
+    const favorites = JSON.parse(localStorage.getItem("favorites"));
+
+    for(let i = 0; i < favorites.length; i++) {
+      this.getGifById(favorites[i], function (results) {
+        console.log("fav", results);
+        gifTastic.addGif(results, true);
+        gifTastic.snackbar("Gif has been added to your favorites.");
+      });
+    }
+
+
   },
 
   /** -- HELPER METHODS -- **/
@@ -104,7 +123,7 @@ var gifTastic = {
   },
 
   snackbar(message) {
-    sb = $("#snackbar");
+    var sb = $("#snackbar");
     $(sb).text(message);
     $(sb).addClass("show");
     setTimeout(function(){ $(sb).removeClass("show") }, 3000);
@@ -112,3 +131,5 @@ var gifTastic = {
 };
 
 gifTastic.addButtons();
+gifTastic.addToFavoritesFromLocalStorage();
+

@@ -10,7 +10,10 @@ $(document).ready(function () {
   });
 
   $("#button-list").on("click", ".gif-button", function () {
-    gifTastic.getGifs($(this).text(), 10);
+    gifTastic.offset = 0;
+    gifTastic.loadMore = false;
+    gifTastic.currentTopic = $(this).text();
+    gifTastic.getGifs();
   });
 
   $("#images, #favorites").on("click", ".gif", function() {
@@ -19,6 +22,12 @@ $(document).ready(function () {
 
   $("#images").on("click", ".fav", function() {
     gifTastic.addToFavorites($(this).attr("data-id"));
+  });
+
+  $("body").on("click", "#load-more", function () {
+    gifTastic.offset++;
+    gifTastic.loadMore = true;
+    gifTastic.getGifs();
   });
 
 
