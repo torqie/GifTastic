@@ -89,7 +89,7 @@ const gifTastic = {
       const cardBody = $("<div class='card-body'>");
       const title = $("<h6 class='card-title'>").text(gif.title);
       const cardText = $("<div class='card-text'>").text("Rating: " + gif.rating);
-      const favBtn = $("<button class='fav btn btn-success'>").text("Add To Favorites");
+      const favBtn = $("<button class='fav btn btn-link card-link'>").text("Add To Favorites");
       $(favBtn).attr("data-id", gif.id);
       $(cardBody).append(title, cardText, favBtn);
       $(card).append(newImage, cardBody);
@@ -110,10 +110,12 @@ const gifTastic = {
   },
 
   addToFavorites(gifId) {
-    this.favorites.push(gifId);
-    localStorage.setItem("favorites", JSON.stringify(this.favorites));
-    this.addToFavoritesFromLocalStorage();
-    gifTastic.snackbar("Gif has been added to your favorites.");
+    if(!this.favorites.includes(gifId)) {
+      this.favorites.push(gifId);
+      localStorage.setItem("favorites", JSON.stringify(this.favorites));
+      this.addToFavoritesFromLocalStorage();
+      gifTastic.snackbar("Gif has been added to your favorites.");
+    }
   },
 
   removeFromFavorites(gifId) {
