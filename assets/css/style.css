@@ -2,6 +2,45 @@
   cursor: pointer;
 }
 
+.drawer-controls {
+  margin-right: -30px;
+
+  position: relative;
+  top:50%;
+
+}
+
+.favorite {
+  position: relative;
+  float: left;
+}
+
+a.remove img {
+  box-shadow: none;
+  position: absolute;
+  right: 20px;
+  top: -7px;
+  margin-top:4px;
+  opacity: 0;
+  display: block;
+  transition: all .5s ease-in-out;
+  cursor: pointer;
+}
+
+.favorite:hover a.remove img {
+  opacity: 1;
+  z-index: 99;
+  position: absolute;
+  top: 5px;
+}
+
+#load-more {
+  margin-bottom:25px;
+  display: none;
+}
+
+
+
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {
   visibility: hidden; /* Hidden by default. Visible on click */

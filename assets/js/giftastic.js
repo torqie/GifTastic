@@ -1,16 +1,21 @@
 // Global Variables.
-
-var gifTastic = {
-
+const gifTastic = {
   // Variables for the object.
   topics: ["boating", "golfing", "coding", "gaming", "audi", "toyota", "dog", "skydiving", "utah jazz", "gronk"], // Topics to be used at the start of the application.
   offset: 0,
   loadMore: false,
   currentTopic: "",
-  favorites: JSON.parse(localStorage.getItem("favorites")),
+  favorites: [],
+
+  setFavorites() {
+    const favorites = JSON.parse(localStorage.getItem("favorites"));
+    if (favorites.length > 0) {
+      this.favorites = favorites;
+    }
+  },
 
   createButton(name) {
-    var button = $("<button>");
+    const button = $("<button>");
     $(button).text(this.capitalizeFirstLetter(name));
     $(button).addClass("btn btn-secondary gif-button mr-2 mb-2");
     $(button).appendTo("#button-list");
@@ -18,7 +23,7 @@ var gifTastic = {
 
   addButtons() {
     $("#button-list").empty();
-    for(let i = 0; i < this.topics.length; i++) {
+    for (let i = 0; i < this.topics.length; i++) {
       this.createButton(gifTastic.topics[i]);
     }
   },
@@ -33,61 +38,67 @@ var gifTastic = {
   },
 
   getGifs() {
-    var queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + this.currentTopic + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10&offset=" + this.offset;
-    this.getData(queryUrl, function(results) {
-        if(results.length > 0) {
-          console.log("loadMore: " + gifTastic.loadMore);
-          if(!gifTastic.loadMore) {
-            $("#images").empty();
-          }
-          for(var i = 0; i < results.length; i++) {
-            gifTastic.addGif(results[i]);
-          }
-        } else {
-          $("#images").html("<h3>No Gifs available for that topic.</h3>");
+    const queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + this.currentTopic + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10&offset=" + this.offset;
+    this.getData(queryUrl, function (results) {
+      if (results.length > 0) {
+        console.log("loadMore: " + gifTastic.loadMore);
+        if (!gifTastic.loadMore) {
+          $("#images").empty();
         }
+        for (let i = 0; i < results.length; i++) {
+          gifTastic.addGif(results[i]);
+        }
+        $("#page-title").text("Showing you gifs on the topic " + gifTastic.currentTopic);
+        $("#load-more").fadeIn();
+      } else {
+        $("#images").empty();
+        $("#page-title").text("Sorry, we can not find any gifs on the topic " + gifTastic.currentTopic);
+        $("#load-more").hide();
+      }
     });
   },
 
   getGifById(gifId, callback) {
-    var queryUrl = "https://api.giphy.com/v1/gifs/" + gifId + "?api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9";
-    this.getData(queryUrl, function(results) {
+    const queryUrl = "https://api.giphy.com/v1/gifs/" + gifId + "?api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9";
+    this.getData(queryUrl, function (results) {
       callback(results);
     });
   },
 
-  addGif(gif, favorite = false){
-    var imageDiv = $("<div class='col-12 col-sm-6 col-md-4 col-lg-3 mb-4'>");
-
-    var card = $("<div class='card'>");
+  addGif(gif, favorite = false) {
+    const imageDiv = $("<div class='col-12 col-sm-6 col-md-4 col-lg-3 mb-4'>");
 
     // Create new image
-    var newImage = $("<img class='gif card-img-top'>");
+    const newImage = $("<img src='' class='gif card-img-top' alt=''>");
     $(newImage).attr("data-animate", gif.images.fixed_width.url);
     $(newImage).attr("data-still", gif.images.fixed_width_still.url);
     $(newImage).attr("data-state", "still");
     $(newImage).attr("src", gif.images.fixed_width_still.url);
 
-    var cardBody = $("<div class='card-body'>");
-    var title =  $("<h6 class='card-title'>").text(gif.title);
-    var cardText = $("<div class='card-text'>").text("Rating: " + gif.rating);
-    var favBtn = $("<button class='fav btn btn-success'>").text("Add To Favorites")
-    $(favBtn).attr("data-id", gif.id)
-    $(cardBody).append(title, cardText, favBtn);
-    $(card).append(newImage, cardBody);
-    $(imageDiv).append(card);
+    if (favorite) {
+      $(imageDiv).attr("class", "col-12 mb-3 favorite");
 
-    if(favorite) {
-      $(imageDiv).attr("class", "col-12");
+      const removeImageLink = $("<a class='remove'>");
+      const removeImage = $("<img src='https://image.flaticon.com/icons/svg/261/261935.svg' style='width:40px;height:40px'>")
+      $(removeImage).appendTo(removeImageLink);
+      $(imageDiv).append(newImage, removeImageLink);
       $("#favorites-body").append(imageDiv);
     } else {
+      const card = $("<div class='card'>");
+      const cardBody = $("<div class='card-body'>");
+      const title = $("<h6 class='card-title'>").text(gif.title);
+      const cardText = $("<div class='card-text'>").text("Rating: " + gif.rating);
+      const favBtn = $("<button class='fav btn btn-success'>").text("Add To Favorites");
+      $(favBtn).attr("data-id", gif.id);
+      $(cardBody).append(title, cardText, favBtn);
+      $(card).append(newImage, cardBody);
+      $(imageDiv).append(card);
       $("#images").append(imageDiv);
     }
   },
-
   toggleGif(gif) {
-    var state = $(gif).attr("data-state");
-    if(state === "still") {
+    const state = $(gif).attr("data-state");
+    if (state === "still") {
       $(gif).attr("src", $(gif).attr("data-animate"));
       $(gif).attr("data-state", "animate");
     } else {
@@ -95,41 +106,37 @@ var gifTastic = {
       $(gif).attr("data-state", "still");
     }
   },
-
   addToFavorites(gifId) {
     this.favorites.push(gifId);
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
     this.addToFavoritesFromLocalStorage();
   },
-
   addToFavoritesFromLocalStorage() {
     $("#favorites-body").empty();
     const favorites = JSON.parse(localStorage.getItem("favorites"));
-
-    for(let i = 0; i < favorites.length; i++) {
-      this.getGifById(favorites[i], function (results) {
-        console.log("fav", results);
-        gifTastic.addGif(results, true);
-        gifTastic.snackbar("Gif has been added to your favorites.");
-      });
+    if (favorites) {
+      for (let i = 0; i < favorites.length; i++) {
+        this.getGifById(favorites[i], function (results) {
+          console.log("fav", results);
+          gifTastic.addGif(results, true);
+          gifTastic.snackbar("Gif has been added to your favorites.");
+        });
+      }
     }
-
-
   },
-
   /** -- HELPER METHODS -- **/
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   },
-
   snackbar(message) {
-    var sb = $("#snackbar");
+    const sb = $("#snackbar");
     $(sb).text(message);
     $(sb).addClass("show");
-    setTimeout(function(){ $(sb).removeClass("show") }, 3000);
+    setTimeout(function () {
+      $(sb).removeClass("show")
+    }, 3000);
   }
 };
-
 gifTastic.addButtons();
 gifTastic.addToFavoritesFromLocalStorage();
-
+gifTastic.setFavorites();

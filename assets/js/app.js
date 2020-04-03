@@ -2,10 +2,11 @@ $(document).ready(function () {
 
   $("#newTopicSubmit").on("click", function(event) {
     event.preventDefault();
-    if($("#new-topic").val()) {
-      gifTastic.topics.push($("#new-topic").val());
+    const newTopic = $("#new-topic");
+    if($(newTopic).val()) {
+      gifTastic.topics.push($(newTopic).val());
       gifTastic.addButtons();
-      $("#new-topic").val("");
+      $(newTopic).val("");
     }
   });
 
@@ -14,6 +15,7 @@ $(document).ready(function () {
     gifTastic.loadMore = false;
     gifTastic.currentTopic = $(this).text();
     gifTastic.getGifs();
+
   });
 
   $("#images, #favorites").on("click", ".gif", function() {
@@ -28,6 +30,12 @@ $(document).ready(function () {
     gifTastic.offset++;
     gifTastic.loadMore = true;
     gifTastic.getGifs();
+  });
+
+  $("#clearFavorites").on("click", function() {
+    localStorage.clear();
+    gifTastic.addToFavoritesFromLocalStorage();
+    gifTastic.snackbar("Your item has been removed from your favorites list.");
   });
 
 

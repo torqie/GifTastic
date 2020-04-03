@@ -1,90 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GifTastic!</title>
-
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Oswald:200,300,400,500,600,700|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
   <!-- Bootstrap -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- Plugin Stylesheets -->
+  <link rel="stylesheet" href="assets/css/pure-drawer.css">
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="assets/css/style.css">
-
-  <!-- Plugin Stylesheets -->
-  <link rel="stylesheet" href="assets/css/bootstrap-drawer.min.css">
-
 </head>
+
 <body>
+  <div id="favorites" class="pure-container" data-effect="pure-effect-scaleRotate">
+    <input type="checkbox" id="pure-toggle-left" class="pure-toggle" data-toggle="left">
+    <label class="pure-toggle-label" for="pure-toggle-left" data-toggle-label="left"> <span><img src="assets/images/favorites.png" alt="favorites"></span>
+    </label>
+    <div class="pure-drawer" data-position="left">
+      <h4 class="title">Favorites</h4>
+      <div id="favorites-body">
 
-  <div id="favorites" class="drawer dw-xs-10 dw-sm-6 dw-md-3 fold" aria-labelledby="favorites">
-    <div class="drawer-controls">
-      <a href="#favorites" data-toggle="drawer" aria-foldedopen="false" aria-controls="favorites" class="btn btn-secondary btn-sm">Favorites</a>
-    </div>
-    <div class="drawer-contents">
-      <div class="drawer-heading">
-        <h5 class="drawer-title">Your Favorites</h5>
       </div>
-      <div id="favorites-body" class="drawer-body"></div>
     </div>
-  </div>
-
-  <header>
-    <div class="container text-center mt-5">
-      <img src="assets/images/logo.png" alt="GifTastic Logo" class="logo">
-    </div>
-  </header>
-
-  <div class="container">
-
-    <div class="row mt-4">
-      <div class="col-12">
-        <form action="#">
-          <div class="input-group">
-            <input type="text" id="new-topic" class="form-control" placeholder="Add a new topic...">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-dark" id="newTopicSubmit">Add New Topic</button>
+    <div class="pure-pusher-container">
+      <div class="pure-pusher">
+        <header>
+          <div class="container text-center mt-5">
+            <img src="assets/images/logo.png" alt="GifTastic Logo" class="logo">
+          </div>
+        </header>
+        <div class="container">
+          <div class="row mt-4">
+            <div class="col-12">
+              <form action="#">
+                <div class="input-group">
+                  <input type="text" id="new-topic" class="form-control" placeholder="Add a new topic...">
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-dark" id="newTopicSubmit">Add New Topic</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-        </form>
+          <div class="row mt-4">
+            <div class="col-12">
+              <!-- List of Buttons -->
+              <div id="button-list"></div>
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <!-- Place to display the images -->
+            <div class="col-12">
+              <h2 id="page-title">Select a topic from above or create a new topic.</h2>
+              <div id="images" class="row text-center"></div>
+            </div>
+            <div class="col text-center">
+              <button id="load-more" class="btn btn-info btn-lg">Load More Gifs</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="row mt-4">
-      <div class="col-12">
-        <!-- List of Buttons -->
-        <div id="button-list"></div>
-      </div>
-    </div>
-
-    <hr />
-
-    <div class="row">
-      <!-- Place to display the images -->
-      <div class="col-12">
-        <h1>Images</h1>
-        <div id="images" class="row text-center"></div>
-      </div>
-      <div class="col">
-        <button id="load-more">Load More Gifs</button>
-      </div>
-    </div>
+    <label class="pure-overlay" for="pure-toggle-left" data-overlay="left"></label>
   </div>
-
   <div id="snackbar"></div>
-
   <!-- Jquery -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-
   <!-- Bootstrap JS -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="assets/js/drawer.min.js"></script>
-
   <!-- Main App JS -->
   <script type="text/javascript" src="assets/js/giftastic.js"></script>
   <script type="text/javascript" src="assets/js/app.js"></script>
-
 </body>
+
 </html>
