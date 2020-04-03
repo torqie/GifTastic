@@ -8,9 +8,11 @@ const gifTastic = {
   favorites: [],
 
   setFavorites() {
-    const favorites = JSON.parse(localStorage.getItem("favorites"));
-    if (favorites.length > 0) {
-      this.favorites = favorites;
+    if(localStorage.getItem("favorites") != null) {
+      const favorites = JSON.parse(localStorage.getItem("favorites"));
+      if (favorites.length > 0) {
+        this.favorites = favorites;
+      }
     }
   },
 
@@ -41,7 +43,6 @@ const gifTastic = {
     const queryUrl = "https://api.giphy.com/v1/gifs/search?q=" + this.currentTopic + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10&offset=" + this.offset;
     this.getData(queryUrl, function (results) {
       if (results.length > 0) {
-        console.log("loadMore: " + gifTastic.loadMore);
         if (!gifTastic.loadMore) {
           $("#images").empty();
         }
@@ -78,11 +79,11 @@ const gifTastic = {
     if (favorite) {
       $(imageDiv).attr("class", "col-12 mb-3 favorite");
 
-      const removeImageLink = $("<a class='remove'>");
+      const removeImageLink = $("<a class='remove' data-id='" + gif.id + "'>");
       const removeImage = $("<img src='https://image.flaticon.com/icons/svg/261/261935.svg' style='width:40px;height:40px'>")
       $(removeImage).appendTo(removeImageLink);
       $(imageDiv).append(newImage, removeImageLink);
-      $("#favorites-body").append(imageDiv);
+      $("#favorites-body").prepend(imageDiv);
     } else {
       const card = $("<div class='card'>");
       const cardBody = $("<div class='card-body'>");
@@ -96,6 +97,7 @@ const gifTastic = {
       $("#images").append(imageDiv);
     }
   },
+
   toggleGif(gif) {
     const state = $(gif).attr("data-state");
     if (state === "still") {
@@ -106,28 +108,45 @@ const gifTastic = {
       $(gif).attr("data-state", "still");
     }
   },
+
   addToFavorites(gifId) {
     this.favorites.push(gifId);
     localStorage.setItem("favorites", JSON.stringify(this.favorites));
     this.addToFavoritesFromLocalStorage();
+    gifTastic.snackbar("Gif has been added to your favorites.");
   },
+
+  removeFromFavorites(gifId) {
+    this.favorites = this.favorites.filter(function (ele) {
+      return ele != gifId;
+    });
+    localStorage.setItem("favorites", JSON.stringify(this.favorites));
+    this.addToFavoritesFromLocalStorage();
+  },
+
+  removeAllFromFavorites() {
+    this.favorites = [];
+  },
+
+
+
   addToFavoritesFromLocalStorage() {
     $("#favorites-body").empty();
     const favorites = JSON.parse(localStorage.getItem("favorites"));
     if (favorites) {
       for (let i = 0; i < favorites.length; i++) {
         this.getGifById(favorites[i], function (results) {
-          console.log("fav", results);
           gifTastic.addGif(results, true);
-          gifTastic.snackbar("Gif has been added to your favorites.");
         });
       }
     }
   },
+
   /** -- HELPER METHODS -- **/
   capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   },
+
   snackbar(message) {
     const sb = $("#snackbar");
     $(sb).text(message);

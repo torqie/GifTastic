@@ -32,8 +32,14 @@ $(document).ready(function () {
     gifTastic.getGifs();
   });
 
+  $("body").on("click", ".remove", function() {
+    gifTastic.removeFromFavorites($(this).attr("data-id"));
+    $(this).fadeOut().remove();
+  });
+
   $("#clearFavorites").on("click", function() {
     localStorage.clear();
+    gifTastic.favorites = [];
     gifTastic.addToFavoritesFromLocalStorage();
     gifTastic.snackbar("Your item has been removed from your favorites list.");
   });

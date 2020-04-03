@@ -15,12 +15,18 @@
   float: left;
 }
 
+.favorite > img{
+  border: 3px solid #5a6f80;
+}
+
+
+
 a.remove img {
   box-shadow: none;
   position: absolute;
-  right: 20px;
+  right: 25px;
   top: -7px;
-  margin-top:4px;
+  margin-top:5px;
   opacity: 0;
   display: block;
   transition: all .5s ease-in-out;
