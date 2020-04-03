@@ -18,7 +18,7 @@ $(document).ready(function () {
 
   });
 
-  $("#images, #favorites").on("click", ".gif", function() {
+  $("#images, #favorites-body").on("click", ".gif", function() {
     gifTastic.toggleGif($(this));
   });
 

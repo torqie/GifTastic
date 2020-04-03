@@ -124,12 +124,6 @@ const gifTastic = {
     this.addToFavoritesFromLocalStorage();
   },
 
-  removeAllFromFavorites() {
-    this.favorites = [];
-  },
-
-
-
   addToFavoritesFromLocalStorage() {
     $("#favorites-body").empty();
     const favorites = JSON.parse(localStorage.getItem("favorites"));
